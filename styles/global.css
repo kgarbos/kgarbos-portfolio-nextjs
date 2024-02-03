@@ -19,6 +19,26 @@ main {
   padding: 2rem;
 }
 
-footer {
-  padding: 1rem 0;
+html,body{
+  overflow-x: hidden;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 600px) {
+  .my-grid-item {
+    /* Styles that will apply when the viewport is 600px wide or less */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Any other mobile-specific styles */
+  main {
+    padding: 1rem; /* Example: reduce the padding on smaller screens */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
 }

@@ -10,9 +10,9 @@ const Blog: React.FC = () => {
         <title>Krzysztof Garbos - Blog</title>
       </Head>
       <Header />
-      <main>
-        <h1>Blog</h1>
-        <h3>Coming soon...</h3>
+      <main style={{ minHeight: 'calc(100vh - 100px)' }}> {/* Adjust '100px' to account for the header and any other fixed height elements */}
+        <h1 style={{ textAlign: 'center' }}>Blog</h1>
+        <h3 style={{ textAlign: 'center' }}>Coming soon...</h3>
       </main>
       <Footer />
     </>

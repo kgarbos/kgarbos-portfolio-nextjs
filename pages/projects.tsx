@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Grid, Typography } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import Header from '../components/Header';
 import ProjectCard from '../components/ProjectCard';
 import Footer from '../components/Footer';
@@ -20,53 +21,83 @@ const Projects: React.FC = () => {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const fetchRepoDetails = async (repo: Repository) => {
+    const languagesResponse = await fetch(`https://api.github.com/repos/kgarbos/${repo.name}/languages`);
+    const languages = await languagesResponse.json();
+
+    const topicsResponse = await fetch(`https://api.github.com/repos/kgarbos/${repo.name}/topics`, {
+      headers: { 'Accept': 'application/vnd.github.mercy-preview+json' },
+    });
+    const topics = await topicsResponse.json();
+
+    return {
+      ...repo,
+      languages: Object.keys(languages),
+      topics: topics.names || [],
+    };
+  };
+
   useEffect(() => {
-    fetch('https://api.github.com/users/kgarbos/repos')
-      .then((response) => response.json())
-      .then(async (data: Repository[]) => {
-        const fetchData = async () => {
-          const promises = data.map(async (repo) => {
-            const languagesResponse = await fetch(`https://api.github.com/repos/kgarbos/${repo.name}/languages`);
-            const topicsResponse = await fetch(`https://api.github.com/repos/kgarbos/${repo.name}/topics`, {
-              headers: {
-                'Accept': 'application/vnd.github.mercy-preview+json'
-              }
-            });
-            const languages = await languagesResponse.json();
-            const topics = await topicsResponse.json();
-  
-            repo.languages = Object.keys(languages);
-            repo.topics = topics.names || [];
-          });
-  
-          await Promise.all(promises);
-        };
-  
-        fetchData().then(() => {
-          data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-          setRepos(data);
-          setLoading(false);
-        });
-      });
+    const cacheKey = 'github-repos';
+
+    const loadRepos = async () => {
+      setLoading(true);
+
+      const cachedRepos = localStorage.getItem(cacheKey);
+      if (cachedRepos) {
+        setRepos(JSON.parse(cachedRepos));
+        setLoading(false);
+      } else {
+        const response = await fetch('https://api.github.com/users/kgarbos/repos');
+        const repoData = await response.json();
+
+        const detailedRepos = await Promise.all(repoData.map(fetchRepoDetails));
+
+        detailedRepos.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+        setRepos(detailedRepos);
+        localStorage.setItem(cacheKey, JSON.stringify(detailedRepos));
+        setLoading(false);
+      }
+    };
+
+    loadRepos();
   }, []);
 
+  if (loading) {
+    return (
+      <>
+        <Head>
+          <title>Loading Projects...</title>
+        </Head>
+        <Header />
+        <main style={{ minHeight: 'calc(100vh - 100px)' }}>
+          <Grid container justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Grid>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Head>
         <title>Krzysztof Garbos - Projects</title>
       </Head>
       <Header />
-      <main>
+      <main style={{ flex: 1 }}>
         <Typography variant="h4" component="div" align="center" gutterBottom>
           <h1>Projects</h1>
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justifyContent="center">
           {repos.map((repo, i) => (
-            <Grid item xs={12} sm={6} md={4} key={repo.name}>
+            <Grid item xs={12} sm={6} md={4} className="my-grid-item" key={repo.name}>
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.2 }}
               >
                 <ProjectCard
                   name={repo.name}
@@ -80,9 +111,16 @@ const Projects: React.FC = () => {
             </Grid>
           ))}
         </Grid>
+
       </main>
-      <Footer />
-    </>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: repos.length * 0.1 }}
+      >
+        <Footer />
+      </motion.div>
+    </div>
   );
 };
 

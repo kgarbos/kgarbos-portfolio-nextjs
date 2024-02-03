@@ -6,7 +6,6 @@ import AboutSection from '../components/AboutSection';
 import SkillsSection from '../components/SkillsSection';
 import ProjectsSection from '../components/ProjectsSection';
 import BackgroundSection from '../components/BackgroundSection';
-import ContactSection from '../components/ContactSection';
 import EducationSection from '../components/EducationSection';
 import { Element } from 'react-scroll';
 
@@ -30,7 +29,6 @@ const Home: React.FC = () => {
         <ProjectsSection />
         <EducationSection />
         <BackgroundSection />
-        <ContactSection />
       </main>
       <Footer />
     </>

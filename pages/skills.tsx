@@ -64,7 +64,7 @@ const workExperience = [
 const Skills = () => {
   const SkillLogo = ({ logo }) => (
     <div className="skill-logo">
-      {logo ? <Image src={logo} alt="Skill Logo" width={150} height={150} style={{objectFit:"contain"}} /> : null}
+      {logo ? <Image src={logo} alt="Skill Logo" width={150} height={150} style={{ objectFit: "contain" }} /> : null}
     </div>
   );
 
@@ -169,20 +169,24 @@ const Skills = () => {
           display: flex;
           flex-direction: column;
           gap: 20px;
+          align-items: center;
         }
 
         .skills-category {
           display: flex;
           flex-direction: column;
+          align-items: center;
         }
 
         .skill-gallery {
           display: flex;
           flex-wrap: wrap;
           gap: 20px;
+          justify-content: center;
         }
 
         .skill-card {
+          flex: 0 0 auto;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -193,7 +197,6 @@ const Skills = () => {
           border-radius: 10px;
           transition: all 0.2s ease-in-out;
         }
-        
 
         .skill-card:hover {
           transform: scale(1.05);
@@ -211,7 +214,37 @@ const Skills = () => {
           font-weight: bold;
           color: #333;
         }
+
+        @media (max-width: 600px) {
+          main {
+            padding: 1rem;
+          }
+
+          .work-experience-header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .work-experience-header h3 {
+            font-size: 1.5rem;
+          }
+
+          .work-experience-header span {
+            font-size: 1rem;
+          }
+
+          .skill-card {
+            width: 100%;
+            max-width: 150px;
+            margin: 0 auto;
+          }
+
+          .skill-logo {
+            width: 100%;
+          }
+        }
       `}</style>
+
     </>
   );
 };
