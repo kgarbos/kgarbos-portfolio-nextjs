@@ -123,23 +123,29 @@ const Projects: React.FC = () => {
           ))}
         </Grid>
 
-        <Typography variant="h6" component="div" align="center" gutterBottom className="section-title">
-          <h2>Freelance Projects</h2>
-        </Typography>
-        <Grid container spacing={3} justifyContent="center">
-          {staticProjects.map((project, i) => (
-            <Grid item xs={12} sm={6} md={4} key={project.name}>
-              <ProjectCard
-                name={project.name}
-                description={project.description}
-                homepage={project.homepage}
-                languages={project.languages}
-                topics={project.topics}
-                image={project.image}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: repos.length * 0.1 }}
+        >
+          <Typography variant="h6" component="div" align="center" gutterBottom className="section-title">
+            <h2>Freelance Projects</h2>
+          </Typography>
+          <Grid container spacing={3} justifyContent="center">
+            {staticProjects.map((project, i) => (
+              <Grid item xs={12} sm={6} md={4} key={project.name}>
+                <ProjectCard
+                  name={project.name}
+                  description={project.description}
+                  homepage={project.homepage}
+                  languages={project.languages}
+                  topics={project.topics}
+                  image={project.image}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </motion.div>
 
       </main>
       <motion.div
