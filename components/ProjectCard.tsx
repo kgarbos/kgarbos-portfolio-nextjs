@@ -5,10 +5,11 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 interface ProjectCardProps {
   name: string;
   description: string;
-  html_url: string;
+  html_url?: string;
   homepage: string;
   languages: string[];
-  topics: string[];
+  topics?: string[];
+  image?: string;
 }
 
 const languageColorMap = {
@@ -17,10 +18,14 @@ const languageColorMap = {
   HTML: { backgroundColor: '#e34f26', textColor: '#fff' },
   CSS: { backgroundColor: '#1572b6', textColor: '#fff' },
   SCSS: { backgroundColor: '#c6538c', textColor: '#fff' },
+  PHP: { backgroundColor: '#787cb4', textColor: '#fff' },
+  WordPress: { backgroundColor: '#21759b', textColor: '#fff' },
+  MySQL: { backgroundColor: '#4479a1', textColor: '#fff' },
 };
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ name, description, html_url, homepage, languages, topics }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ name, description, html_url, homepage, languages, topics, image }) => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(undefined);
+  const projectImage = image || previewImage;
 
   useEffect(() => {
     fetch(`https://raw.githubusercontent.com/kgarbos/${name}/main/preview.jpg`)
@@ -49,11 +54,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ name, description, html_url, 
       }
     }}>
       <CardActionArea component="a" href={homepage || html_url} target="_blank">
-        {previewImage && (
+        {projectImage && (
           <CardMedia
             component="img"
             height="140"
-            image={previewImage}
+            image={projectImage}
             alt={name}
           />
         )}
