@@ -3,6 +3,6 @@ Typescript Next.js Portfolio
 
 - [x] Typescript
 - [x] Next.js
-- [x] Meterial UI
+- [x] Material UI
 - [x] React
 - [ ] Blog Functionality - Work in Progress
